@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lab 2FA · Login</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="card">
+    <header>
+      <h1>Lab 2FA</h1>
+      <p class="steps">
+        <span data-step="1">1 · Contraseña</span>
+        <span data-step="2">2 · Segundo factor</span>
+        <span data-step="3">3 · Bóveda</span>
+      </p>
+    </header>
+
+    <div id="alert" class="alert" hidden></div>
+
+    <!-- Paso 1: usuario y contraseña -->
+    <section id="view-login">
+      <form id="login-form">
+        <label>Usuario <input name="username" autocomplete="username" required minlength="3" /></label>
+        <label>Contraseña <input name="password" type="password" autocomplete="current-password" required minlength="6" /></label>
+        <div class="row">
+          <button type="submit" class="primary">Iniciar sesión</button>
+          <button type="button" id="register-btn">Crear cuenta</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Aprovisionamiento: QR + códigos de respaldo -->
+    <section id="view-setup" hidden>
+      <h2>Activa tu 2FA</h2>
+      <p class="muted">Estado: <code id="setup-status"></code></p>
+      <ol class="muted">
+        <li>Escanea el QR con tu app Authenticator (y con Google Authenticator para la prueba de paridad).</li>
+        <li>Escribe el código de 6 dígitos para pasar a <code>ACTIVE</code>.</li>
+      </ol>
+      <img id="qr" alt="QR otpauth" />
+      <details>
+        <summary>Ingresar el secreto a mano</summary>
+        <code id="secret" class="secret"></code>
+      </details>
+      <div class="backup">
+        <strong>Códigos de respaldo (un solo uso)</strong>
+        <p class="muted">Guárdalos ahora: no se vuelven a mostrar.</p>
+        <ul id="backup-codes"></ul>
+      </div>
+    </section>
+
+    <!-- Paso 2: código TOTP o de respaldo -->
+    <section id="view-verify" hidden>
+      <form id="verify-form">
+        <label id="code-label">Código de 6 dígitos
+          <input name="code" id="code" inputmode="numeric" autocomplete="one-time-code" required />
+        </label>
+        <label class="check"><input type="checkbox" id="use-backup" /> Usar un código de respaldo</label>
+        <div class="row">
+          <button type="submit" class="primary">Verificar</button>
+          <button type="button" class="logout">Cancelar</button>
+        </div>
+      </form>
+      <p class="muted small">El <code>pre_auth_token</code> solo sirve para este paso y vence en 5 minutos.</p>
+    </section>
+
+    <!-- Paso 3: recurso protegido -->
+    <section id="view-vault" hidden>
+      <h2>Bóveda secreta</h2>
+      <pre id="vault"></pre>
+      <details>
+        <summary>Claims del access_token</summary>
+        <pre id="claims"></pre>
+      </details>
+      <div class="row">
+        <button type="button" class="logout">Cerrar sesión</button>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

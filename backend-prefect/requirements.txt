@@ -1,0 +1,7 @@
+fastapi==0.150.0
+httpx==0.28.1
+pillow==13.0.0
+prefect==3.9.0
+PyJWT==2.15.1
+qrcode[pil]==8.2
+uvicorn[standard]==0.54.0
